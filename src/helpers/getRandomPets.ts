@@ -1,8 +1,8 @@
-import { IPet } from '../types/interfaces/Pet';
+import { IBreed } from '../types/Breed';
 
 type Props = {
-    dog: IPet[];
-    cat: IPet[];
+    dog: IBreed[];
+    cat: IBreed[];
 };
 
 export const getRandomPets = (pets: Props) => {
