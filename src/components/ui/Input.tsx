@@ -8,7 +8,7 @@ const Input: React.FC<Props> = forwardRef<HTMLInputElement, Props>(({ className 
     <input
         ref={ref}
         {...props}
-        className={`w-full h-10 px-4 rounded border border-gray outline-none transition-all duration-300 focus:border-black ${className}`}
+        className={`w-full h-10 lg:h-12 px-4 text-base lg:text-lg rounded border border-gray outline-none transition-all duration-300 focus:border-black ${className}`}
     />
 ));
 
