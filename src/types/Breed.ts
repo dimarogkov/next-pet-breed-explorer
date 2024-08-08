@@ -1,9 +1,14 @@
-export interface IPetWeight {
+export interface IBreedImg {
+    id: string;
+    url: string;
+}
+
+export interface IBreedWeight {
     imperial: string;
     metric: string;
 }
 
-export interface IPet {
+export interface IBreed {
     id: string;
     name: string;
     type: string;
@@ -15,5 +20,5 @@ export interface IPet {
     description: string;
     life_span: string;
     reference_image_id: string;
-    weight: IPetWeight;
+    weight: IBreedWeight;
 }

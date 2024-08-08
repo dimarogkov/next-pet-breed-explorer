@@ -2,22 +2,23 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { IPet } from '@/src/types/interfaces/Pet';
+import { IBreed } from '@/src/types/Breed';
 import { BtnLink, Subtitle } from '../../ui';
 
 type Props = {
-    pet: IPet;
+    breed: IBreed;
 };
 
-const PetCard: React.FC<Props> = ({ pet }) => {
+const BreedCard: React.FC<Props> = ({ breed }) => {
     const [imageLoaded, setImageLoaded] = useState(true);
-    const { name, type, reference_image_id } = pet;
+
+    const { id, name, type, reference_image_id } = breed;
     const src = `https://cdn2.the${type}api.com/images/${reference_image_id}.jpg`;
 
     return (
         <div className='relative flex flex-col w-full rounded-lg overflow-hidden border border-gray'>
             <Link
-                href={name}
+                href={`${type}-${id}`}
                 className='relative w-full pb-[75%] cursor-pointer bg-gray transition-opacity duration-300 hover:opacity-75'
             >
                 {imageLoaded && (
@@ -34,10 +35,10 @@ const PetCard: React.FC<Props> = ({ pet }) => {
 
             <div className='flex flex-col flex-grow justify-between w-full p-4'>
                 <Subtitle className='mb-4 last:mb-0'>{name}</Subtitle>
-                <BtnLink href={name}>About Breed</BtnLink>
+                <BtnLink href={`${type}-${id}`}>About Breed</BtnLink>
             </div>
         </div>
     );
 };
 
-export default PetCard;
+export default BreedCard;
