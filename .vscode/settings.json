@@ -8,8 +8,12 @@
         "tailwindcss",
         "tanstack",
         "Technolgies",
+        "thecatapi",
+        "thedogapi",
         "todos",
         "Uncomplete",
+        "vcahospitals",
+        "vetstreet",
         "zustand"
     ]
 }
