@@ -5,8 +5,10 @@ type Props = {
     cat: IBreed[];
 };
 
-export const getRandomPets = (pets: Props) => {
-    const [dog, cat] = Object.keys(pets).map((type) => pets[type as keyof Props].map((pet) => ({ ...pet, type })));
+export const getRandomBreeds = (breeds: Props) => {
+    const [dog, cat] = Object.keys(breeds).map((type) => {
+        return breeds[type as keyof Props].map((breed) => ({ ...breed, type }));
+    });
 
     return [...dog, ...cat]
         .map((a) => ({ ...a, sort: Math.random() }))
