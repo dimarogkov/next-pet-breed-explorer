@@ -38,8 +38,8 @@ const BreedInfoSlider: React.FC<Props> = ({ images }) => {
 
                     {imageLoaded ? (
                         <Image
-                            src={images[currentIndex].url}
-                            alt={images[currentIndex].id}
+                            src={images[currentIndex]?.url}
+                            alt={images[currentIndex]?.id}
                             fill
                             className='absolute top-0 left-0 w-full h-full object-fill object-center'
                             onLoadingComplete={() => setIsSkeletonShow(true)}

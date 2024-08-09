@@ -14,23 +14,29 @@ type Props = {
 const BreedInfo: React.FC<Props> = ({ breedId }) => {
     const [type, id] = breedId.split('-');
 
-    const { data: breed, isLoading: isLoadingBreed } = useQuery({
+    const {
+        data: breed,
+        isLoading: isLoadingBreed,
+        isRefetching: isRefetchingBreed,
+    } = useQuery({
         queryFn: () => getBreedById(type, id),
         select: (date) => date.data,
         queryKey: ['breed'],
     });
 
-    const { data: breedImages, isLoading: isLoadingBreedImages } = useQuery({
+    const {
+        data: breedImages,
+        isLoading: isLoadingBreedImages,
+        isRefetching: isRefetchingBreedImages,
+    } = useQuery({
         queryFn: () => getImagesByBreed(type, id),
         select: (date) => date.data,
         queryKey: ['breedImages'],
     });
 
-    console.log(isLoadingBreed, isLoadingBreedImages);
-
     const isDataLoading = useMemo(() => {
-        return isLoadingBreed || isLoadingBreedImages;
-    }, [isLoadingBreed, isLoadingBreedImages]);
+        return isLoadingBreed || isLoadingBreedImages || isRefetchingBreed || isRefetchingBreedImages;
+    }, [isLoadingBreed, isLoadingBreedImages, isRefetchingBreed, isRefetchingBreedImages]);
 
     return (
         <section className='relative w-full'>
