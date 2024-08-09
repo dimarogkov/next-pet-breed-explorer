@@ -1,10 +1,11 @@
 'use client';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getRandomPets } from '@/src/helpers/getRandomPets';
+import { getRandomBreeds } from '@/src/helpers/getRandomBreeds';
+import { getBreeds } from '@/src/services/breed';
 
 import BreedCard from '../BreedCard/BreedCard';
 import { Loader } from '../../ui';
-import { getBreeds } from '@/src/services/breed';
 
 const BreedList = () => {
     const { data: dogsBreeds, isLoading: isLoadingDogs } = useQuery({
@@ -19,17 +20,23 @@ const BreedList = () => {
         queryKey: ['catsBreeds'],
     });
 
-    const petsBreeds = dogsBreeds && catsBreeds && getRandomPets({ dog: [...dogsBreeds], cat: [...catsBreeds] });
+    const isDataLoading = useMemo(() => {
+        return isLoadingDogs || isLoadingCats || !dogsBreeds || !catsBreeds;
+    }, [catsBreeds, dogsBreeds, isLoadingCats, isLoadingDogs]);
+
+    const petsBreeds = dogsBreeds && catsBreeds && getRandomBreeds({ dog: [...dogsBreeds], cat: [...catsBreeds] });
 
     return (
         <section className='relative w-full'>
-            {isLoadingDogs && isLoadingCats && <Loader />}
+            {isDataLoading && <Loader />}
 
-            <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 w-full'>
-                {petsBreeds?.map((breed) => (
-                    <BreedCard breed={breed} key={breed.id} />
-                ))}
-            </div>
+            {!isDataLoading && petsBreeds?.length && (
+                <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 w-full'>
+                    {petsBreeds.map((breed) => (
+                        <BreedCard breed={breed} key={breed.id} />
+                    ))}
+                </div>
+            )}
         </section>
     );
 };

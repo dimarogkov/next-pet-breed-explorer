@@ -1,4 +1,5 @@
 'use client';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getBreedById, getImagesByBreed } from '@/src/services/breed';
 
@@ -25,11 +26,15 @@ const BreedInfo: React.FC<Props> = ({ breedId }) => {
         queryKey: ['breedImages'],
     });
 
+    const isDataLoading = useMemo(() => {
+        return isLoadingBreed || isLoadingBreedImages || !breed || !breedImages;
+    }, [breed, breedImages, isLoadingBreed, isLoadingBreedImages]);
+
     return (
         <section className='relative w-full'>
-            {isLoadingBreed && isLoadingBreedImages && <Loader />}
+            {isDataLoading && <Loader />}
 
-            {breed && breedImages && (
+            {!isDataLoading && breed && breedImages && (
                 <div className='flex flex-col md:flex-row gap-8 lg:gap-10 w-full'>
                     <BreedInfoSlider images={breedImages} />
                     <BreedInfoContent breed={breed} />
