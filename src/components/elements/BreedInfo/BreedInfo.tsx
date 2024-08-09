@@ -26,15 +26,17 @@ const BreedInfo: React.FC<Props> = ({ breedId }) => {
         queryKey: ['breedImages'],
     });
 
+    console.log(isLoadingBreed, isLoadingBreedImages);
+
     const isDataLoading = useMemo(() => {
-        return isLoadingBreed || isLoadingBreedImages || !breed || !breedImages;
-    }, [breed, breedImages, isLoadingBreed, isLoadingBreedImages]);
+        return isLoadingBreed || isLoadingBreedImages;
+    }, [isLoadingBreed, isLoadingBreedImages]);
 
     return (
         <section className='relative w-full'>
             {isDataLoading && <Loader />}
 
-            {!isDataLoading && breed && breedImages && (
+            {breed && breedImages && (
                 <div className='flex flex-col md:flex-row gap-8 lg:gap-10 w-full'>
                     <BreedInfoSlider images={breedImages} />
                     <BreedInfoContent breed={breed} />

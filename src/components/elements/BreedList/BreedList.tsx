@@ -21,8 +21,8 @@ const BreedList = () => {
     });
 
     const isDataLoading = useMemo(() => {
-        return isLoadingDogs || isLoadingCats || !dogsBreeds || !catsBreeds;
-    }, [catsBreeds, dogsBreeds, isLoadingCats, isLoadingDogs]);
+        return isLoadingDogs || isLoadingCats;
+    }, [isLoadingCats, isLoadingDogs]);
 
     const petsBreeds = dogsBreeds && catsBreeds && getRandomBreeds({ dog: [...dogsBreeds], cat: [...catsBreeds] });
 
@@ -30,7 +30,7 @@ const BreedList = () => {
         <section className='relative w-full'>
             {isDataLoading && <Loader />}
 
-            {!isDataLoading && petsBreeds?.length && (
+            {petsBreeds?.length && (
                 <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 w-full'>
                     {petsBreeds.map((breed) => (
                         <BreedCard breed={breed} key={breed.id} />

@@ -1,18 +1,19 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
 import { IBreed } from '@/src/types/Breed';
-import { BtnLink, Subtitle } from '../../ui';
+import { BtnLink, DefaultImg, Label, Subtitle } from '../../ui';
 
 type Props = {
     breed: IBreed;
 };
 
 const BreedCard: React.FC<Props> = ({ breed }) => {
+    const [isSkeletonShow, setIsSkeletonShow] = useState(true);
     const [imageLoaded, setImageLoaded] = useState(true);
 
-    const { id, name, type, reference_image_id } = breed;
+    const { id, name, type, temperament, reference_image_id } = breed;
     const src = `https://cdn2.the${type}api.com/images/${reference_image_id}.jpg`;
 
     return (
@@ -21,20 +22,35 @@ const BreedCard: React.FC<Props> = ({ breed }) => {
                 href={`${type}-${id}`}
                 className='relative w-full pb-[75%] cursor-pointer bg-gray transition-opacity duration-300 hover:opacity-75'
             >
-                {imageLoaded && (
+                {isSkeletonShow && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
+
+                {imageLoaded ? (
                     <Image
-                        loader={() => src}
                         src={src}
                         alt={name}
                         fill
                         className='absolute top-0 left-0 w-full h-full object-cover object-center'
+                        onLoadingComplete={() => setIsSkeletonShow(true)}
                         onError={() => setImageLoaded(false)}
                     />
+                ) : (
+                    <DefaultImg />
                 )}
             </Link>
 
             <div className='flex flex-col flex-grow justify-between w-full p-4'>
-                <Subtitle className='mb-4 last:mb-0'>{name}</Subtitle>
+                <div className='w-full mb-4 last:mb-0'>
+                    <Subtitle className='mb-4 last:mb-0'>{name}</Subtitle>
+
+                    {temperament && (
+                        <div className='flex flex-wrap gap-1'>
+                            {temperament.split(', ').map((item) => (
+                                <Label key={item}>{item}</Label>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 <BtnLink href={`${type}-${id}`}>About Breed</BtnLink>
             </div>
         </div>

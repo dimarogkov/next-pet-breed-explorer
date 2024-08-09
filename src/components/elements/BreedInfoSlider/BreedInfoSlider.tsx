@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { IBreedImg } from '@/src/types/Breed';
+import { DefaultImg } from '../../ui';
 import cn from 'classnames';
 
 type Props = {
@@ -9,22 +10,21 @@ type Props = {
 
 const BreedInfoSlider: React.FC<Props> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isSkeletonShow, setIsSkeletonShow] = useState(true);
     const [imageLoaded, setImageLoaded] = useState(true);
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         if (!isHovered) {
-            const interval = setInterval(() => nextSlide(), 4000);
+            const interval = setInterval(() => {
+                setCurrentIndex((prevState) => prevState + 1);
+            }, 4000);
 
             return () => {
                 clearInterval(interval);
             };
         }
     }, [isHovered]);
-
-    const nextSlide = () => {
-        setCurrentIndex((prevState) => prevState + 1);
-    };
 
     return (
         <>
@@ -34,15 +34,19 @@ const BreedInfoSlider: React.FC<Props> = ({ images }) => {
                     onMouseOver={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    {imageLoaded && (
+                    {isSkeletonShow && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
+
+                    {imageLoaded ? (
                         <Image
-                            loader={() => images[currentIndex].url}
                             src={images[currentIndex].url}
                             alt={images[currentIndex].id}
                             fill
                             className='absolute top-0 left-0 w-full h-full object-fill object-center'
+                            onLoadingComplete={() => setIsSkeletonShow(true)}
                             onError={() => setImageLoaded(false)}
                         />
+                    ) : (
+                        <DefaultImg />
                     )}
                 </div>
 
