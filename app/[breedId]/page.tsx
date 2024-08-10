@@ -21,12 +21,9 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 const BreedPage: React.FC<Props> = ({ params }) => {
     return (
         <div className='relative w-full'>
-            <div className='w-full mb-5 lg:mb-8 last:mb-0'>
-                <BtnLink href='/' className='mb-6 last:mb-0'>
-                    Black
-                </BtnLink>
-
+            <div className='flex flex-col-reverse sm:flex-row items-center justify-between gap-5 w-full mb-5 lg:mb-8 last:mb-0'>
                 <Title>Breed Page</Title>
+                <BtnLink href='/'>Black</BtnLink>
             </div>
 
             <BreedInfo breedId={params.breedId} />
