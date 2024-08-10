@@ -26,6 +26,8 @@ const BreedInfoSlider: React.FC<Props> = ({ images }) => {
         }
     }, [isHovered]);
 
+    console.log(images);
+
     return (
         <>
             <div className='relative w-full'>
