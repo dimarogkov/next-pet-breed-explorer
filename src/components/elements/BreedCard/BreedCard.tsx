@@ -10,8 +10,8 @@ type Props = {
 };
 
 const BreedCard: React.FC<Props> = ({ breed }) => {
-    const [isSkeletonShow, setIsSkeletonShow] = useState(true);
-    const [imageLoaded, setImageLoaded] = useState(true);
+    const [isImgError, setIsImgError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const { id, name, type, temperament, reference_image_id } = breed;
     const src = `https://cdn2.the${type}api.com/images/${reference_image_id}.jpg`;
@@ -22,16 +22,16 @@ const BreedCard: React.FC<Props> = ({ breed }) => {
                 href={`${type}-${id}`}
                 className='relative w-full pb-[75%] cursor-pointer bg-gray transition-opacity duration-300 hover:opacity-75'
             >
-                {isSkeletonShow && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
+                {isLoading && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
 
-                {imageLoaded ? (
+                {!isImgError ? (
                     <Image
                         src={src}
                         alt={name}
                         fill
                         className='absolute top-0 left-0 w-full h-full object-cover object-center'
-                        onLoadingComplete={() => setIsSkeletonShow(true)}
-                        onError={() => setImageLoaded(false)}
+                        onLoadingComplete={() => setIsLoading(false)}
+                        onError={() => setIsImgError(true)}
                     />
                 ) : (
                     <DefaultImg />
