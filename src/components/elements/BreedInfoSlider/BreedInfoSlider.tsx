@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { IBreedImg } from '@/src/types/Breed';
 import { DefaultImg } from '../../ui';
@@ -10,55 +10,54 @@ type Props = {
 
 const BreedInfoSlider: React.FC<Props> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isSkeletonShow, setIsSkeletonShow] = useState(true);
-    const [imageLoaded, setImageLoaded] = useState(true);
     const [isHovered, setIsHovered] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const totalImages = images.length;
 
     useEffect(() => {
-        if (!isHovered) {
+        if (!isHovered && totalImages > 1) {
             const interval = setInterval(() => {
-                setCurrentIndex((prevState) => prevState + 1);
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
             }, 4000);
 
-            return () => {
-                clearInterval(interval);
-            };
+            return () => clearInterval(interval);
         }
-    }, [isHovered]);
+    }, [isHovered, totalImages]);
 
-    console.log(images);
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
     return (
         <>
             <div className='relative w-full'>
                 <div
                     className='relative w-full pb-[70%] rounded-xl overflow-hidden border border-gray bg-gray mb-3 last:mb-0'
-                    onMouseOver={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                 >
-                    {isSkeletonShow && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
+                    {isLoading && <div className='absolute top-0 left-0 w-full h-full skeleton'></div>}
 
-                    {imageLoaded ? (
+                    {totalImages > 0 ? (
                         <Image
-                            src={images[currentIndex]?.url}
-                            alt={images[currentIndex]?.id}
+                            src={images[currentIndex].url}
+                            alt={images[currentIndex].id}
                             fill
                             className='absolute top-0 left-0 w-full h-full object-fill object-center'
-                            onLoadingComplete={() => setIsSkeletonShow(true)}
-                            onError={() => setImageLoaded(false)}
+                            onLoadingComplete={() => setIsLoading(true)}
+                            onError={() => setIsLoading(false)}
                         />
                     ) : (
                         <DefaultImg />
                     )}
                 </div>
 
-                {images.length > 1 && (
+                {totalImages > 1 && (
                     <div className='flex justify-center gap-3 lg:gap-4 w-full'>
                         {images.map((img, index) => (
                             <div
                                 key={img.id}
                                 className={cn(
-                                    `w-3 lg:w-4 h-3 lg:h-4 rounded-full cursor-pointer transition-opacity duration-300 hover:opacity-75`,
+                                    'w-3 lg:w-4 h-3 lg:h-4 rounded-full cursor-pointer transition-opacity duration-300 hover:opacity-75',
                                     {
                                         'bg-red': index === currentIndex,
                                         'bg-gray': index !== currentIndex,
