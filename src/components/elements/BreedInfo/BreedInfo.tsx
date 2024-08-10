@@ -1,6 +1,6 @@
 'use client';
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getBreedById, getImagesByBreed } from '@/src/services/breed';
 
 import BreedInfoSlider from '../BreedInfoSlider/BreedInfoSlider';
@@ -12,31 +12,28 @@ type Props = {
 };
 
 const BreedInfo: React.FC<Props> = ({ breedId }) => {
+    const queryClient = useQueryClient();
     const [type, id] = breedId.split('-');
 
-    const {
-        data: breed,
-        isLoading: isLoadingBreed,
-        isRefetching: isRefetchingBreed,
-    } = useQuery({
+    useEffect(() => {
+        return () => {
+            queryClient.clear();
+        };
+    }, [queryClient]);
+
+    const { data: breed, isLoading: isLoadingBreed } = useQuery({
         queryFn: () => getBreedById(type, id),
-        select: (date) => date.data,
-        queryKey: ['breed'],
+        select: (data) => data.data,
+        queryKey: ['breed', type, id],
     });
 
-    const {
-        data: breedImages,
-        isLoading: isLoadingBreedImages,
-        isRefetching: isRefetchingBreedImages,
-    } = useQuery({
+    const { data: breedImages, isLoading: isLoadingBreedImages } = useQuery({
         queryFn: () => getImagesByBreed(type, id),
-        select: (date) => date.data,
-        queryKey: ['breedImages'],
+        select: (data) => data.data,
+        queryKey: ['breedImages', type, id],
     });
 
-    const isDataLoading = useMemo(() => {
-        return isLoadingBreed || isLoadingBreedImages || isRefetchingBreed || isRefetchingBreedImages;
-    }, [isLoadingBreed, isLoadingBreedImages, isRefetchingBreed, isRefetchingBreedImages]);
+    const isDataLoading = isLoadingBreed || isLoadingBreedImages;
 
     return (
         <section className='relative w-full'>

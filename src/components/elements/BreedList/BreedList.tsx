@@ -1,5 +1,4 @@
 'use client';
-import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getRandomBreeds } from '@/src/helpers/getRandomBreeds';
 import { getBreeds } from '@/src/services/breed';
@@ -10,21 +9,18 @@ import { Loader } from '../../ui';
 const BreedList = () => {
     const { data: dogsBreeds, isLoading: isLoadingDogs } = useQuery({
         queryFn: () => getBreeds('dog'),
-        select: (date) => date.data,
+        select: (data) => data.data,
         queryKey: ['dogsBreeds'],
     });
 
     const { data: catsBreeds, isLoading: isLoadingCats } = useQuery({
         queryFn: () => getBreeds('cat'),
-        select: (date) => date.data,
+        select: (data) => data.data,
         queryKey: ['catsBreeds'],
     });
 
-    const isDataLoading = useMemo(() => {
-        return isLoadingDogs || isLoadingCats;
-    }, [isLoadingCats, isLoadingDogs]);
-
     const petsBreeds = dogsBreeds && catsBreeds && getRandomBreeds({ dog: [...dogsBreeds], cat: [...catsBreeds] });
+    const isDataLoading = isLoadingDogs || isLoadingCats;
 
     return (
         <section className='relative w-full'>
