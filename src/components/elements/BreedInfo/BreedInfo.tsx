@@ -31,10 +31,6 @@ const BreedInfo: React.FC<Props> = ({ breedId }) => {
         queryFn: () => getImagesByBreed(type, id),
         select: (data) => data.data,
         queryKey: ['breedImages', type, id],
-        refetchOnWindowFocus: false, // Вимкнути перезапит при фокусуванні
-        staleTime: Infinity, // Дані завжди залишаються "свіжими"
-        retry: false, // Вимкнути повторні запити при помилках
-        retryOnMount: false,
     });
 
     const isDataLoading = isLoadingBreed || isLoadingBreedImages;
