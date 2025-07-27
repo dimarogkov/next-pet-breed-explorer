@@ -17,7 +17,7 @@ Explore the world of animals with **"Pet Breed Explorer"** and find the perfect 
 ## Installation Steps
 
 -   Download the repository
--   Use the 18th version of Node.js
+-   Use the v18.20.2 version of Node.js
 -   Run `npm i`
 -   Run `npm run dev`
 
